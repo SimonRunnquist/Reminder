@@ -110,8 +110,8 @@ namespace AlarmClock
         }
 
         private void getTime(int alarmHour, int alarmMinute) {
-            get
 
+            //Push mot XML
             if (alarmHour == hour && alarmMinute == minute)
         }
     }
