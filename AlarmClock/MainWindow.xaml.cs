@@ -12,6 +12,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Xml;
+using System.Xml.Linq;
 
 
 namespace AlarmClock
@@ -23,25 +25,38 @@ namespace AlarmClock
     {
         DateTime alarmTime = new DateTime();
         DateTime currentTime = new DateTime();
-        AlarmProps alarmProps = new AlarmProps();
+        //AlarmProps alarmProps = new AlarmProps();
         TimeSpan tiSp = new TimeSpan();
+        AlarmXML alarm = new AlarmXML();
         int hour = 0;
         int minute = 0;
+        string xmlPath = "";
 
         public MainWindow()
         {
             InitializeComponent();
             FillHourAndMinute();
+            SetXmlFilePath();
+            CreateXML();
         }
 
+        /*
         public void setAlarm(String name, String phoneNumber, String currentCase, DateTime alarm)
         {
+            AlarmProps alarmProps = new AlarmProps();
             //Sätter alarmet
             alarmProps.Name = name;
             alarmProps.Phone = phoneNumber;
             alarmProps.CurrentCase = currentCase;
             alarmProps.Alarm = alarm;
+
+
+        }*/
+
+        public void SetXmlFilePath() {
+            xmlPath = Environment.CurrentDirectory;
         }
+        
 
         public void controlDate() {
             if (PickDate.SelectedDate != null) {
@@ -52,7 +67,7 @@ namespace AlarmClock
 
         //Fyll cb_hour och cb_minute med data
         private void FillHourAndMinute() {
-            for (var i = 0; i < 25; i++) {
+            for (var i = 0; i < 24; i++) {
                 if (i < 10) {
                     cb_hour.Items.Add("0" + i);
                 }
@@ -104,6 +119,7 @@ namespace AlarmClock
             {
                 controlDate();
                 Console.WriteLine(alarmTime.ToString());
+                addAlarm(1, "Jens", "073 44 44 675", "E-INC0000002", alarmTime);
             }
 
             getTime(hour, minute);
@@ -112,7 +128,35 @@ namespace AlarmClock
         private void getTime(int alarmHour, int alarmMinute) {
 
             //Push mot XML
-            if (alarmHour == hour && alarmMinute == minute)
+            //if (alarmHour == hour && alarmMinute == minute)
+        }
+
+        public void CreateXML() {
+            using (XmlWriter writer = XmlWriter.Create(xmlPath + @"\Alarmsss.xml")) {
+                writer.WriteStartDocument();
+                writer.WriteStartElement("Alarms");
+            }
+        }
+
+        public void addAlarm(int id, string name, string phoneNumber, string caseNumber, DateTime callDate) {
+            try
+            {
+                XDocument doc = XDocument.Load(xmlPath + @"\Alarmsss.xml");
+                XElement alarm = doc.Element("Alarms");
+                alarm.Add(new XElement("Alarm",
+                            new XElement("id", id),
+                            new XElement("name", name),
+                            new XElement("phoneNumber", phoneNumber),
+                            new XElement("caseNumber", caseNumber),
+                            new XElement("dateTime", callDate.ToString())));
+
+                doc.Save(xmlPath + @"\Alarmsss.xml");
+
+
+            }
+            catch(Exception e) {
+                Console.WriteLine(e.Message.ToString());
+            }
         }
     }
 }
