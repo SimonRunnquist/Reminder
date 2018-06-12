@@ -14,6 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Xml;
 using System.Xml.Linq;
+using System.IO;
 
 
 namespace AlarmClock
@@ -31,6 +32,9 @@ namespace AlarmClock
         int hour = 0;
         int minute = 0;
         string xmlPath = "";
+        string name;
+        string phoneNumber;
+        string caseNumber;
 
         public MainWindow()
         {
@@ -38,6 +42,7 @@ namespace AlarmClock
             FillHourAndMinute();
             SetXmlFilePath();
             CreateXML();
+            ReadXml();
         }
 
         /*
@@ -63,6 +68,23 @@ namespace AlarmClock
                 alarmTime = new DateTime(PickDate.SelectedDate.Value.Year, PickDate.SelectedDate.Value.Month, PickDate.SelectedDate.Value.Day, hour, minute, 0, 0, DateTimeKind.Local);
             }
 
+        }
+
+        public void controlInformation() {
+            if (NameOfUser.Text != null || NameOfUser.Text != "")
+            {
+                if (PhoneNumber.Text != null || PhoneNumber.Text != "")
+                {
+                    if (CaseNumber.Text != null || CaseNumber.Text != "")
+                    {
+                        name = NameOfUser.Text;
+                        phoneNumber = PhoneNumber.Text;
+                        caseNumber = CaseNumber.Text;
+                    }
+
+                }
+
+            }
         }
 
         //Fyll cb_hour och cb_minute med data
@@ -118,8 +140,9 @@ namespace AlarmClock
             if (checkTime())
             {
                 controlDate();
-                Console.WriteLine(alarmTime.ToString());
-                addAlarm(1, "Jens", "073 44 44 675", "E-INC0000002", alarmTime);
+                controlInformation();
+
+                addAlarm(1, name, phoneNumber, caseNumber, alarmTime);
             }
 
             getTime(hour, minute);
@@ -131,10 +154,46 @@ namespace AlarmClock
             //if (alarmHour == hour && alarmMinute == minute)
         }
 
+
+        //Läs XML-filen
+
+        public void ReadXml() {
+            try {
+                XDocument doc = XDocument.Load(xmlPath + @"\Alarmsss.xml");
+                var alarms = from alarm in doc.Descendants("Alarm")
+                             select new
+                             {
+                                 ID = alarm.Element("id").Value,
+                                 Name = alarm.Element("name").Value,
+                                 PhoneNumber = alarm.Element("phoneNumber").Value,
+                                 CaseNumber = alarm.Element("caseNumber").Value,
+                                 DateOfAlarm = alarm.Element("dateTime").Value
+                             };
+
+                foreach (var alarm in alarms)
+                {
+                    Console.WriteLine(alarm.DateOfAlarm);
+                }
+
+            }
+            catch(Exception e) {
+                Console.WriteLine(e.Message);
+            }
+        }
+
         public void CreateXML() {
-            using (XmlWriter writer = XmlWriter.Create(xmlPath + @"\Alarmsss.xml")) {
-                writer.WriteStartDocument();
-                writer.WriteStartElement("Alarms");
+
+            if (File.Exists(xmlPath + @"\Alarmsss.xml"))
+            {
+                Console.WriteLine("File Already Exists");
+            }
+            else
+            {
+                using (XmlWriter writer = XmlWriter.Create(xmlPath + @"\Alarmsss.xml"))
+                {
+                    writer.WriteStartDocument();
+                    writer.WriteStartElement("Alarms");
+                }
             }
         }
 
