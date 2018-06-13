@@ -1,25 +1,143 @@
-﻿<Window x:Class="AlarmClock.MainWindow"
+﻿<Window x:Name="MainWindowProp" x:Class="AlarmClock.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:AlarmClock"
         mc:Ignorable="d"
-        Title="EvryReminder" Height="482.151" Width="225" Background="#FF3F3F46">
-    <Grid Background="#FF3F3F46" Margin="0,0,2,0">
-        <TextBox x:Name="NameOfUser" HorizontalAlignment="Left" Height="23" Margin="15,38,0,0" TextWrapping="Wrap" Text="Skriv namn..." VerticalAlignment="Top" Width="179"/>
-        <TextBox x:Name="PhoneNumber" HorizontalAlignment="Left" Height="23" Margin="15,90,0,0" TextWrapping="Wrap" Text="Skriv telefonnummer..." VerticalAlignment="Top" Width="179"/>
-        <TextBox x:Name="CaseNumber" HorizontalAlignment="Left" Height="23" Margin="15,142,0,0" TextWrapping="Wrap" Text="Skriv ärendenummer..." VerticalAlignment="Top" Width="179"/>
-        <Label Content="Namn" HorizontalAlignment="Left" Margin="11,12,0,0" VerticalAlignment="Top" Foreground="White"/>
-        <Label Content="Telefonnummer" HorizontalAlignment="Left" Margin="11,64,0,0" VerticalAlignment="Top" Foreground="White"/>
-        <Label Content="Ärendenummer" HorizontalAlignment="Left" Margin="11,116,0,0" VerticalAlignment="Top" Foreground="White"/>
-        <Calendar x:Name="PickDate" HorizontalAlignment="Left" Margin="15,205,0,0" VerticalAlignment="Top" TextOptions.TextFormattingMode="Display"/>
-        <Label Content="Datum" HorizontalAlignment="Left" Margin="11,181,0,0" VerticalAlignment="Top" Foreground="White"/>
-        <Button x:Name="btn_setAlarm" Content="Sätt alarm" HorizontalAlignment="Left" Margin="119,399,0,0" VerticalAlignment="Top" Width="75" Click="btn_setAlarm_Click"/>
+        Title="EvryReminder" Height="482.151" Width="484" Background="#FF3F3F46" Visibility="Visible" ResizeMode="CanMinimize">
+    <Grid Background="#FF3F3F46">
+        <TextBox x:Name="NameOfUser" HorizontalAlignment="Left" Height="23" Margin="15,38,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="179" Background="#4C000000" Foreground="White" BorderBrush="{x:Null}"/>
+        <TextBox x:Name="PhoneNumber" HorizontalAlignment="Left" Height="23" Margin="15,90,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="179" Background="#4C000000" Foreground="White" BorderBrush="{x:Null}"/>
+        <TextBox x:Name="CaseNumber" HorizontalAlignment="Left" Height="23" Margin="15,142,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="179" Background="#4C000000" Foreground="White" BorderBrush="{x:Null}"/>
+        <Label Content="Name" HorizontalAlignment="Left" Margin="11,12,0,0" VerticalAlignment="Top" Foreground="White"/>
+        <Label Content="Phone" HorizontalAlignment="Left" Margin="11,64,0,0" VerticalAlignment="Top" Foreground="White"/>
+        <Label Content="Description" HorizontalAlignment="Left" Margin="11,116,0,0" VerticalAlignment="Top" Foreground="White"/>
+        <Calendar x:Name="PickDate" HorizontalAlignment="Left" Margin="15,205,0,0" VerticalAlignment="Top" TextOptions.TextFormattingMode="Display" Foreground="White" BorderBrush="{x:Null}">
+            <Calendar.Background>
+                <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
+                    <GradientStop Color="#FFD8D8D8" Offset="1"/>
+                    <GradientStop Color="White"/>
+                </LinearGradientBrush>
+            </Calendar.Background>
+        </Calendar>
+        <Label Content="Date" HorizontalAlignment="Left" Margin="11,181,0,0" VerticalAlignment="Top" Foreground="White"/>
+        <Button x:Name="btn_setAlarm" Content="Set Alarm" HorizontalAlignment="Left" Margin="119,399,0,0" VerticalAlignment="Top" Width="75" Click="btn_setAlarm_Click"/>
         <ComboBox x:Name="cb_hour" HorizontalAlignment="Left" Margin="15,399,0,0" VerticalAlignment="Top" Width="42"/>
         <ComboBox x:Name="cb_minute" HorizontalAlignment="Left" Margin="62,399,0,0" VerticalAlignment="Top" Width="42"/>
-        <Label Content="Timme" HorizontalAlignment="Left" Margin="11,375,0,0" VerticalAlignment="Top" Foreground="White"/>
-        <Label Content="Minut" HorizontalAlignment="Left" Margin="63,377,0,0" VerticalAlignment="Top" Foreground="White"/>
+        <Label Content="Hour" HorizontalAlignment="Left" Margin="11,375,0,0" VerticalAlignment="Top" Foreground="White"/>
+        <Label Content="Minute" HorizontalAlignment="Left" Margin="63,377,0,0" VerticalAlignment="Top" Foreground="White"/>
+        <Label Content="Alarms" HorizontalAlignment="Left" Margin="564,34,-131,0" VerticalAlignment="Top" Foreground="White"/>
+        <Rectangle HorizontalAlignment="Left" Height="3" Margin="16,164,0,0" VerticalAlignment="Top" Width="177">
+            <Rectangle.Fill>
+                <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
+                    <LinearGradientBrush.RelativeTransform>
+                        <TransformGroup>
+                            <ScaleTransform CenterY="0.5" CenterX="0.5"/>
+                            <SkewTransform CenterY="0.5" CenterX="0.5"/>
+                            <RotateTransform Angle="90" CenterY="0.5" CenterX="0.5"/>
+                            <TranslateTransform/>
+                        </TransformGroup>
+                    </LinearGradientBrush.RelativeTransform>
+                    <GradientStop Color="#FF3EECA5" Offset="1"/>
+                    <GradientStop Color="#FF0ABBD6" Offset="0.303"/>
+                </LinearGradientBrush>
+            </Rectangle.Fill>
+        </Rectangle>
+        <Rectangle HorizontalAlignment="Left" Height="3" Margin="16,112,0,0" VerticalAlignment="Top" Width="177">
+            <Rectangle.Fill>
+                <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
+                    <LinearGradientBrush.RelativeTransform>
+                        <TransformGroup>
+                            <ScaleTransform CenterY="0.5" CenterX="0.5"/>
+                            <SkewTransform CenterY="0.5" CenterX="0.5"/>
+                            <RotateTransform Angle="90" CenterY="0.5" CenterX="0.5"/>
+                            <TranslateTransform/>
+                        </TransformGroup>
+                    </LinearGradientBrush.RelativeTransform>
+                    <GradientStop Color="#FF3EECA5" Offset="1"/>
+                    <GradientStop Color="#FF0ABBD6" Offset="0.303"/>
+                </LinearGradientBrush>
+            </Rectangle.Fill>
+        </Rectangle>
+        <Rectangle HorizontalAlignment="Left" Height="3" Margin="16,60,0,0" VerticalAlignment="Top" Width="177">
+            <Rectangle.Fill>
+                <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
+                    <LinearGradientBrush.RelativeTransform>
+                        <TransformGroup>
+                            <ScaleTransform CenterY="0.5" CenterX="0.5"/>
+                            <SkewTransform CenterY="0.5" CenterX="0.5"/>
+                            <RotateTransform Angle="90" CenterY="0.5" CenterX="0.5"/>
+                            <TranslateTransform/>
+                        </TransformGroup>
+                    </LinearGradientBrush.RelativeTransform>
+                    <GradientStop Color="#FF3EECA5" Offset="1"/>
+                    <GradientStop Color="#FF0ABBD6" Offset="0.303"/>
+                </LinearGradientBrush>
+            </Rectangle.Fill>
+        </Rectangle>
+        <Rectangle HorizontalAlignment="Left" Height="3" Margin="569,186,-292,0" VerticalAlignment="Top" Width="202">
+            <Rectangle.Fill>
+                <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
+                    <LinearGradientBrush.RelativeTransform>
+                        <TransformGroup>
+                            <ScaleTransform CenterY="0.5" CenterX="0.5"/>
+                            <SkewTransform CenterY="0.5" CenterX="0.5"/>
+                            <RotateTransform Angle="90" CenterY="0.5" CenterX="0.5"/>
+                            <TranslateTransform/>
+                        </TransformGroup>
+                    </LinearGradientBrush.RelativeTransform>
+                    <GradientStop Color="#FF3EECA5"/>
+                    <GradientStop Color="#FF0ABBD6" Offset="1"/>
+                </LinearGradientBrush>
+            </Rectangle.Fill>
+        </Rectangle>
+        <Rectangle HorizontalAlignment="Left" Height="3" Margin="16,366,0,0" VerticalAlignment="Top" Width="177">
+            <Rectangle.Fill>
+                <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
+                    <LinearGradientBrush.RelativeTransform>
+                        <TransformGroup>
+                            <ScaleTransform CenterY="0.5" CenterX="0.5"/>
+                            <SkewTransform CenterY="0.5" CenterX="0.5"/>
+                            <RotateTransform Angle="90" CenterY="0.5" CenterX="0.5"/>
+                            <TranslateTransform/>
+                        </TransformGroup>
+                    </LinearGradientBrush.RelativeTransform>
+                    <GradientStop Color="#FF3EECA5" Offset="1"/>
+                    <GradientStop Color="#FF0ABBD6" Offset="0.303"/>
+                </LinearGradientBrush>
+            </Rectangle.Fill>
+        </Rectangle>
+        <ListBox x:Name="lb_Alarms" HorizontalAlignment="Left" Height="127" Margin="569,60,-292,0" VerticalAlignment="Top" Width="202" BorderBrush="{x:Null}" Background="#FF2C2C31" Foreground="White" SelectionChanged="lb_Alarms_SelectionChanged"/>
+        <Button x:Name="b_ShowAlarms" Content="" Margin="718,377,-303,32" BorderBrush="{x:Null}" HorizontalAlignment="Center" FontSize="16" Width="64" Click="button_Click" RenderTransformOrigin="0.5,0.5" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch">
+            <Button.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform/>
+                    <RotateTransform Angle="-45"/>
+                    <TranslateTransform/>
+                </TransformGroup>
+            </Button.RenderTransform>
+            <Button.Background>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <LinearGradientBrush.RelativeTransform>
+                        <TransformGroup>
+                            <ScaleTransform CenterY="0.5" CenterX="0.5"/>
+                            <SkewTransform CenterY="0.5" CenterX="0.5"/>
+                            <RotateTransform Angle="135" CenterY="0.5" CenterX="0.5"/>
+                            <TranslateTransform/>
+                        </TransformGroup>
+                    </LinearGradientBrush.RelativeTransform>
+                    <GradientStop Color="#FF3EECA5" Offset="0.413"/>
+                    <GradientStop Color="#FF0ABBD6" Offset="1"/>
+                </LinearGradientBrush>
+            </Button.Background>
+        </Button>
+        <Frame x:Name="f_Alarm001" Content="" HorizontalAlignment="Left" Height="32" Margin="273,38,0,0" VerticalAlignment="Top" Width="160" Background="White"/>
+        <Frame x:Name="f_Alarm002" Content="" HorizontalAlignment="Left" Height="32" Margin="273,78,0,0" VerticalAlignment="Top" Width="160" Background="White"/>
+        <Frame x:Name="f_Alarm003" Content="" HorizontalAlignment="Left" Height="32" Margin="273,118,0,0" VerticalAlignment="Top" Width="160" Background="White"/>
+        <Frame x:Name="f_Alarm004" Content="" HorizontalAlignment="Left" Height="32" Margin="273,158,0,0" VerticalAlignment="Top" Width="160" Background="White"/>
+        <Frame x:Name="f_Alarm005" Content="" HorizontalAlignment="Left" Height="32" Margin="273,198,0,0" VerticalAlignment="Top" Width="160" Background="White"/>
 
     </Grid>
 </Window>

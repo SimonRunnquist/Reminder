@@ -35,14 +35,26 @@ namespace AlarmClock
         string name;
         string phoneNumber;
         string caseNumber;
+        List<AlarmXML> alarmXMLRef = new List<AlarmXML>();
+        bool bSeeAlarms = false;
+        AlarmInfo alarmInfoRef = new AlarmInfo();
+
 
         public MainWindow()
         {
             InitializeComponent();
+            b_ShowAlarms.Margin = new Thickness(192, 431, -32, -22);
+            sortAlarms();
             FillHourAndMinute();
             SetXmlFilePath();
             CreateXML();
             ReadXml();
+        }
+
+        //Fyll "frames" med "AlarmInfo"
+        public void sortAlarms() {
+            alarmInfoRef.b_alarmInfo.Content = "Datum";
+            f_Alarm001.Navigate(alarmInfoRef);
         }
 
         /*
@@ -133,6 +145,7 @@ namespace AlarmClock
             alarmTime.Add(tiSp);
         }
 
+        //Trycker på "Sätt Alarm"
         private void btn_setAlarm_Click(object sender, RoutedEventArgs e)
         {
 
@@ -141,25 +154,18 @@ namespace AlarmClock
             {
                 controlDate();
                 controlInformation();
-
-                addAlarm(1, name, phoneNumber, caseNumber, alarmTime);
+                addAlarm(1, name, phoneNumber, caseNumber, alarmTime.Year, alarmTime.Month, alarmTime.Day, alarmTime.Hour, alarmTime.Minute);
+                ReadXml();
             }
-
-            getTime(hour, minute);
         }
 
-        private void getTime(int alarmHour, int alarmMinute) {
-
-            //Push mot XML
-            //if (alarmHour == hour && alarmMinute == minute)
-        }
-
-
+       //======================================================================//
         //Läs XML-filen
 
         public void ReadXml() {
             try {
-                XDocument doc = XDocument.Load(xmlPath + @"\Alarmsss.xml");
+                alarmXMLRef.Clear();
+                XDocument doc = XDocument.Load(xmlPath + @"\Alarms.xml");
                 var alarms = from alarm in doc.Descendants("Alarm")
                              select new
                              {
@@ -167,14 +173,30 @@ namespace AlarmClock
                                  Name = alarm.Element("name").Value,
                                  PhoneNumber = alarm.Element("phoneNumber").Value,
                                  CaseNumber = alarm.Element("caseNumber").Value,
-                                 DateOfAlarm = alarm.Element("dateTime").Value
+                                 Year = alarm.Element("year").Value,
+                                 Month = alarm.Element("month").Value,
+                                 Day = alarm.Element("day").Value,
+                                 Hour = alarm.Element("hour").Value,
+                                 Minute = alarm.Element("minute").Value,
                              };
 
                 foreach (var alarm in alarms)
                 {
-                    Console.WriteLine(alarm.DateOfAlarm);
+                    AlarmXML alarmRef = new AlarmXML();
+                    alarmRef.Id = Int32.Parse(alarm.ID);
+                    alarmRef.Name = alarm.Name;
+                    alarmRef.PhoneNumber = alarm.PhoneNumber;
+                    alarmRef.CaseNumber = alarm.CaseNumber;
+                    alarmRef.Year = Int32.Parse(alarm.Year);
+                    alarmRef.Month = Int32.Parse(alarm.Month);
+                    alarmRef.Day = Int32.Parse(alarm.Day);
+                    alarmRef.Hour = Int32.Parse(alarm.Hour);
+                    alarmRef.Minute = Int32.Parse(alarm.Minute);
+
+                    alarmXMLRef.Add(alarmRef);
                 }
 
+                AddToList();
             }
             catch(Exception e) {
                 Console.WriteLine(e.Message);
@@ -183,13 +205,13 @@ namespace AlarmClock
 
         public void CreateXML() {
 
-            if (File.Exists(xmlPath + @"\Alarmsss.xml"))
+            if (File.Exists(xmlPath + @"\Alarms.xml"))
             {
                 Console.WriteLine("File Already Exists");
             }
             else
             {
-                using (XmlWriter writer = XmlWriter.Create(xmlPath + @"\Alarmsss.xml"))
+                using (XmlWriter writer = XmlWriter.Create(xmlPath + @"\Alarms.xml"))
                 {
                     writer.WriteStartDocument();
                     writer.WriteStartElement("Alarms");
@@ -197,24 +219,61 @@ namespace AlarmClock
             }
         }
 
-        public void addAlarm(int id, string name, string phoneNumber, string caseNumber, DateTime callDate) {
+        
+        public void AddToList() {
+            lb_Alarms.Items.Clear();
+            foreach (var item in alarmXMLRef) {
+                lb_Alarms.Items.Add(item.Name);
+            }
+
+            Console.WriteLine("La till allt i listan");
+
+        }
+
+        public void addAlarm(int id, string name, string phoneNumber, string caseNumber, int year, int month, int day, int _hour, int _minute) {
             try
             {
-                XDocument doc = XDocument.Load(xmlPath + @"\Alarmsss.xml");
+                XDocument doc = XDocument.Load(xmlPath + @"\Alarms.xml");
                 XElement alarm = doc.Element("Alarms");
                 alarm.Add(new XElement("Alarm",
                             new XElement("id", id),
                             new XElement("name", name),
                             new XElement("phoneNumber", phoneNumber),
                             new XElement("caseNumber", caseNumber),
-                            new XElement("dateTime", callDate.ToString())));
+                            new XElement("year", year),
+                            new XElement("month", month),
+                            new XElement("day", day),
+                            new XElement("hour", _hour),
+                            new XElement("minute", _minute)));
 
-                doc.Save(xmlPath + @"\Alarmsss.xml");
+                doc.Save(xmlPath + @"\Alarms.xml");
 
 
             }
             catch(Exception e) {
                 Console.WriteLine(e.Message.ToString());
+            }
+        }
+
+        private void lb_Alarms_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
+
+        private void button_Click(object sender, RoutedEventArgs e)
+        {
+            if (!bSeeAlarms)
+            {
+                MainWindowProp.Width = 484;
+                bSeeAlarms = true;
+                b_ShowAlarms.Margin = new Thickness(446, 431, -32, -22);
+            }
+            else {
+
+                MainWindowProp.Width = 230;
+                bSeeAlarms = false;
+                b_ShowAlarms.Margin = new Thickness(192, 431, -32, -22);
+                //b_ShowAlarms.Margin.Right = -32;
             }
         }
     }
