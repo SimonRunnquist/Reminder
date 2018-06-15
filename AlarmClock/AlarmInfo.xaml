@@ -4,14 +4,13 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:AlarmClock"
-      mc:Ignorable="d" 
-      d:DesignHeight="300" d:DesignWidth="300"
-      Title="AlarmInfo" Width="160" Height="32">
+      mc:Ignorable="d"
+      Title="AlarmInfo" Width="196" Height="40">
 
-    <Grid Background="#FF3F3F46">
-        <Rectangle HorizontalAlignment="Left" Height="32" VerticalAlignment="Top" Width="34">
-            <Rectangle.Fill>
-                <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
+    <Grid Height="40" VerticalAlignment="Top" Background="#00000000">
+        <Ellipse HorizontalAlignment="Left" Height="32" Margin="6,3,0,0" VerticalAlignment="Top" Width="33" StrokeThickness="2" Fill="#4C000000">
+            <Ellipse.Stroke>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                     <LinearGradientBrush.RelativeTransform>
                         <TransformGroup>
                             <ScaleTransform CenterY="0.5" CenterX="0.5"/>
@@ -20,12 +19,34 @@
                             <TranslateTransform/>
                         </TransformGroup>
                     </LinearGradientBrush.RelativeTransform>
-                    <GradientStop Color="#FFECB53E" Offset="0.708"/>
-                    <GradientStop Color="#FF0A8CD6"/>
+                    <GradientStop Color="#FF3EECA5" Offset="0"/>
+                    <GradientStop Color="#FF0ABBD6" Offset="0.997"/>
                 </LinearGradientBrush>
-            </Rectangle.Fill>
-        </Rectangle>
-        <Button x:Name="b_alarmInfo" Content="2018-06-13 15:45" HorizontalAlignment="Left" Margin="39,3,0,0" VerticalAlignment="Top" Width="118" Height="26" BorderBrush="{x:Null}" Background="#FF3F3F46" Foreground="White"/>
+            </Ellipse.Stroke>
+        </Ellipse>
+        <Label x:Name="l_alarmName" Content="S" HorizontalAlignment="Left" VerticalAlignment="Top" Width="20" Height="25" BorderBrush="{x:Null}" Margin="13,5,0,0" FontSize="20" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Padding="0" Background="{x:Null}">
+            <Label.Foreground>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <LinearGradientBrush.RelativeTransform>
+                        <TransformGroup>
+                            <ScaleTransform CenterY="0.5" CenterX="0.5"/>
+                            <SkewTransform CenterY="0.5" CenterX="0.5"/>
+                            <RotateTransform Angle="90" CenterY="0.5" CenterX="0.5"/>
+                            <TranslateTransform/>
+                        </TransformGroup>
+                    </LinearGradientBrush.RelativeTransform>
+                    <GradientStop Color="#FF0ABBD6" Offset="1"/>
+                    <GradientStop Color="#FF3EECA5"/>
+                </LinearGradientBrush>
+            </Label.Foreground>
+        </Label>
+        <Label x:Name="l_alarmInfo" Content="2018-06-12 15:45" HorizontalAlignment="Left" VerticalAlignment="Top" Width="152" Height="31" BorderBrush="{x:Null}" Foreground="White" Margin="43,2,0,0" FontSize="18">
+            <Label.Background>
+                <SolidColorBrush Color="#FF3F3F46" Opacity="0"/>
+            </Label.Background>
+        </Label>
+
+
 
     </Grid>
 </Page>

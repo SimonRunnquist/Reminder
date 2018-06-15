@@ -37,38 +37,65 @@ namespace AlarmClock
         string caseNumber;
         List<AlarmXML> alarmXMLRef = new List<AlarmXML>();
         bool bSeeAlarms = false;
-        AlarmInfo alarmInfoRef = new AlarmInfo();
 
 
         public MainWindow()
         {
             InitializeComponent();
             b_ShowAlarms.Margin = new Thickness(192, 431, -32, -22);
-            sortAlarms();
             FillHourAndMinute();
             SetXmlFilePath();
             CreateXML();
             ReadXml();
+            SortAlarms();
+        }
+
+        //Trycker på "Sätt Alarm"
+        private void btn_setAlarm_Click(object sender, RoutedEventArgs e)
+        {
+
+            //Behöver hantera Nullvärde
+            if (checkTime())
+            {
+                controlDate();
+                controlInformation();
+                addAlarm(1, name, phoneNumber, caseNumber, alarmTime.Year, alarmTime.Month, alarmTime.Day, alarmTime.Hour, alarmTime.Minute);
+                ReadXml();
+                SortAlarms();
+            }
         }
 
         //Fyll "frames" med "AlarmInfo"
-        public void sortAlarms() {
-            alarmInfoRef.b_alarmInfo.Content = "Datum";
-            f_Alarm001.Navigate(alarmInfoRef);
+        public void SortAlarms() {
+
+            //Tar bort alla kids
+            sb_AlarmHolder.Children.Clear();
+
+            foreach (var item in alarmXMLRef)
+            {
+
+                string dateBuilder = item.Year + "-" + item.Month + "-" + item.Day + " " + item.Hour + ":" + item.Minute;
+
+                AlarmInfo alarmInfoRef = new AlarmInfo();
+                alarmInfoRef.l_alarmName.Content = item.Name.Substring(0,1);
+                alarmInfoRef.l_alarmInfo.Content = dateBuilder;
+
+                Frame frameRef = new Frame();
+                frameRef.Width = 196;
+                frameRef.Height = 40;
+
+                Frame divider = new Frame();
+                divider.Width = 225;
+                divider.Height = 5;
+
+                frameRef.Navigate(alarmInfoRef);
+
+                sb_AlarmHolder.Children.Add(frameRef);
+                sb_AlarmHolder.Children.Add(divider);
+            }
+
         }
-
-        /*
-        public void setAlarm(String name, String phoneNumber, String currentCase, DateTime alarm)
-        {
-            AlarmProps alarmProps = new AlarmProps();
-            //Sätter alarmet
-            alarmProps.Name = name;
-            alarmProps.Phone = phoneNumber;
-            alarmProps.CurrentCase = currentCase;
-            alarmProps.Alarm = alarm;
-
-
-        }*/
+        
 
         public void SetXmlFilePath() {
             xmlPath = Environment.CurrentDirectory;
@@ -145,19 +172,7 @@ namespace AlarmClock
             alarmTime.Add(tiSp);
         }
 
-        //Trycker på "Sätt Alarm"
-        private void btn_setAlarm_Click(object sender, RoutedEventArgs e)
-        {
-
-            //Behöver hantera Nullvärde
-            if (checkTime())
-            {
-                controlDate();
-                controlInformation();
-                addAlarm(1, name, phoneNumber, caseNumber, alarmTime.Year, alarmTime.Month, alarmTime.Day, alarmTime.Hour, alarmTime.Minute);
-                ReadXml();
-            }
-        }
+        
 
        //======================================================================//
         //Läs XML-filen
@@ -195,8 +210,6 @@ namespace AlarmClock
 
                     alarmXMLRef.Add(alarmRef);
                 }
-
-                AddToList();
             }
             catch(Exception e) {
                 Console.WriteLine(e.Message);
@@ -218,18 +231,7 @@ namespace AlarmClock
                 }
             }
         }
-
         
-        public void AddToList() {
-            lb_Alarms.Items.Clear();
-            foreach (var item in alarmXMLRef) {
-                lb_Alarms.Items.Add(item.Name);
-            }
-
-            Console.WriteLine("La till allt i listan");
-
-        }
-
         public void addAlarm(int id, string name, string phoneNumber, string caseNumber, int year, int month, int day, int _hour, int _minute) {
             try
             {
@@ -264,9 +266,9 @@ namespace AlarmClock
         {
             if (!bSeeAlarms)
             {
-                MainWindowProp.Width = 484;
+                MainWindowProp.Width = 447;
                 bSeeAlarms = true;
-                b_ShowAlarms.Margin = new Thickness(446, 431, -32, -22);
+                b_ShowAlarms.Margin = new Thickness(407, 431, -32, -22);
             }
             else {
 
