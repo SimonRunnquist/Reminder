@@ -22,11 +22,18 @@
             </Calendar.Background>
         </Calendar>
         <Label Content="Date" HorizontalAlignment="Left" Margin="11,181,0,0" VerticalAlignment="Top" Foreground="White"/>
-        <Button x:Name="btn_setAlarm" Content="Set Alarm" HorizontalAlignment="Left" Margin="119,399,0,0" VerticalAlignment="Top" Width="75" Click="btn_setAlarm_Click" Height="22"/>
-        <ComboBox x:Name="cb_hour" HorizontalAlignment="Left" Margin="15,399,0,0" VerticalAlignment="Top" Width="42"/>
-        <ComboBox x:Name="cb_minute" HorizontalAlignment="Left" Margin="57,399,0,0" VerticalAlignment="Top" Width="42"/>
+        <Button x:Name="btn_setAlarm" Content="Set Alarm" HorizontalAlignment="Left" Margin="119,399,0,0" VerticalAlignment="Top" Width="75" Click="btn_setAlarm_Click" Height="22" BorderBrush="{x:Null}" BorderThickness="0" Foreground="Black"/>
+        <ComboBox x:Name="cb_hour" HorizontalAlignment="Left" Margin="15,399,0,0" VerticalAlignment="Top" Width="42" BorderBrush="{x:Null}">
+            <ComboBox.Background>
+                <LinearGradientBrush EndPoint="0,1" StartPoint="0,0">
+                    <GradientStop Color="#FFF0F0F0" Offset="0"/>
+                    <GradientStop Color="#FF3F3F46" Offset="1"/>
+                </LinearGradientBrush>
+            </ComboBox.Background>
+        </ComboBox>
+        <ComboBox x:Name="cb_minute" HorizontalAlignment="Left" Margin="57,399,0,0" VerticalAlignment="Top" Width="42" Background="#FF3F3F46" BorderBrush="{x:Null}"/>
         <Label Content="Hour" HorizontalAlignment="Left" Margin="17,375,0,0" VerticalAlignment="Top" Foreground="White"/>
-        <Label Content="Minute" HorizontalAlignment="Left" Margin="54,377,0,0" VerticalAlignment="Top" Foreground="White"/>
+        <Label Content="Minute" HorizontalAlignment="Left" Margin="54,375,0,0" VerticalAlignment="Top" Foreground="White"/>
         <Rectangle HorizontalAlignment="Left" Height="3" Margin="16,164,0,0" VerticalAlignment="Top" Width="177">
             <Rectangle.Fill>
                 <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
@@ -116,32 +123,8 @@
                 </LinearGradientBrush>
             </Button.Background>
         </Button>
-        <StackPanel x:Name="sb_AlarmHolder" Margin="225,43,0,41" Width="196" HorizontalAlignment="Left"/>
-        <Label Content="Alarms" HorizontalAlignment="Left" Margin="236,12,0,0" VerticalAlignment="Top" Foreground="White"/>
-        <Rectangle HorizontalAlignment="Left" Height="3" Margin="32,224,0,0" VerticalAlignment="Top" Width="367" RenderTransformOrigin="0.5,0.5">
-            <Rectangle.RenderTransform>
-                <TransformGroup>
-                    <ScaleTransform/>
-                    <SkewTransform/>
-                    <RotateTransform Angle="-90"/>
-                    <TranslateTransform/>
-                </TransformGroup>
-            </Rectangle.RenderTransform>
-            <Rectangle.Fill>
-                <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
-                    <LinearGradientBrush.RelativeTransform>
-                        <TransformGroup>
-                            <ScaleTransform CenterY="0.5" CenterX="0.5"/>
-                            <SkewTransform CenterY="0.5" CenterX="0.5"/>
-                            <RotateTransform Angle="90" CenterY="0.5" CenterX="0.5"/>
-                            <TranslateTransform/>
-                        </TransformGroup>
-                    </LinearGradientBrush.RelativeTransform>
-                    <GradientStop Color="#FF3EECA5" Offset="1"/>
-                    <GradientStop Color="#FF0ABBD6" Offset="0.303"/>
-                </LinearGradientBrush>
-            </Rectangle.Fill>
-        </Rectangle>
+        <StackPanel x:Name="sb_AlarmHolder" Margin="225,36,0,48" Width="196" HorizontalAlignment="Left"/>
+        <Label Content="Alarms" HorizontalAlignment="Left" Margin="225,12,0,0" VerticalAlignment="Top" Foreground="White"/>
         <Rectangle HorizontalAlignment="Left" Height="3" Margin="119,421,0,0" VerticalAlignment="Top" Width="75">
             <Rectangle.Fill>
                 <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">

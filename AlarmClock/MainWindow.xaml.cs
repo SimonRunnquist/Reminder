@@ -77,8 +77,11 @@ namespace AlarmClock
                 string dateBuilder = item.Year + "-" + item.Month + "-" + item.Day + " " + item.Hour + ":" + item.Minute;
 
                 AlarmInfo alarmInfoRef = new AlarmInfo();
-                alarmInfoRef.l_alarmName.Content = item.Name.Substring(0,1);
+                alarmInfoRef.l_alarmName.Content = item.Name;
                 alarmInfoRef.l_alarmInfo.Content = dateBuilder;
+                alarmInfoRef.l_alarmDesc.Content = item.CaseNumber;
+                alarmInfoRef.l_alarmNumber.Content = item.PhoneNumber;
+
 
                 Frame frameRef = new Frame();
                 frameRef.Width = 196;
