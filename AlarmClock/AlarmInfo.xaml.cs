@@ -35,7 +35,6 @@ namespace AlarmClock
             {
                 l_alarmDesc.Visibility = Visibility.Visible;
                 l_alarmNumber.Visibility = Visibility.Visible;
-                copyNumber_button.Visibility = Visibility.Visible;
                 l_alarmName.Visibility = Visibility.Hidden;
                 l_alarmInfo.Visibility = Visibility.Hidden;
                 moreInformation = true;
@@ -43,13 +42,10 @@ namespace AlarmClock
             else {
                 l_alarmDesc.Visibility = Visibility.Hidden;
                 l_alarmNumber.Visibility = Visibility.Hidden;
-                copyNumber_button.Visibility = Visibility.Hidden;
                 l_alarmName.Visibility = Visibility.Visible;
                 l_alarmInfo.Visibility = Visibility.Visible;
                 moreInformation = false;
             }
-
-
         }
 
         private void copyNumber_button_Click(object sender, RoutedEventArgs e)

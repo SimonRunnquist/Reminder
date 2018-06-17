@@ -15,6 +15,7 @@ using System.Windows.Shapes;
 using System.Xml;
 using System.Xml.Linq;
 using System.IO;
+using System.Timers;
 
 
 namespace AlarmClock
@@ -24,19 +25,26 @@ namespace AlarmClock
     /// </summary>
     public partial class MainWindow : Window
     {
+        //Datum och tider
         DateTime alarmTime = new DateTime();
         DateTime currentTime = new DateTime();
-        //AlarmProps alarmProps = new AlarmProps();
         TimeSpan tiSp = new TimeSpan();
+
+
+        //Referenser
         AlarmXML alarm = new AlarmXML();
+        List<AlarmXML> alarmXMLRef = new List<AlarmXML>();
+        AlarmPopup alarmPopup = new AlarmPopup();
+
+        //Globala variabler
         int hour = 0;
         int minute = 0;
         string xmlPath = "";
         string name;
         string phoneNumber;
         string caseNumber;
-        List<AlarmXML> alarmXMLRef = new List<AlarmXML>();
         bool bSeeAlarms = false;
+        
 
 
         public MainWindow()
@@ -48,21 +56,58 @@ namespace AlarmClock
             CreateXML();
             ReadXml();
             SortAlarms();
+
+            //Skapa timer
+            Timer aTimer = new Timer();
+            aTimer.Elapsed += new ElapsedEventHandler(OnTimedEvent);
+            aTimer.Interval = 5000;
+            aTimer.Enabled = true;
+           
+
         }
 
         //Trycker på "Sätt Alarm"
         private void btn_setAlarm_Click(object sender, RoutedEventArgs e)
         {
-
             //Behöver hantera Nullvärde
             if (checkTime())
             {
                 controlDate();
                 controlInformation();
                 addAlarm(1, name, phoneNumber, caseNumber, alarmTime.Year, alarmTime.Month, alarmTime.Day, alarmTime.Hour, alarmTime.Minute);
+                ClearProps();
                 ReadXml();
                 SortAlarms();
             }
+        }
+
+        //Kollar efter alarm i alarmXMLRef
+        public void OnTimedEvent(object source, ElapsedEventArgs e)
+        {
+            //Itererar igenom samtiga satta alarm
+            foreach (var item in alarmXMLRef) {
+
+                
+                if (DateTime.Now.Month == item.Month && DateTime.Now.Day == item.Day && DateTime.Now.Hour == item.Hour && DateTime.Now.Minute == item.Minute)
+                {
+                    //Hittar alarm, gör något
+                    Console.WriteLine("Ring alarm, GÖR DET NU!");
+                }
+                else {
+                    //Hittar inte alarm, gör inget
+                    Console.WriteLine("Det är inte dags för alarm att ringa");
+                }
+            }
+        }
+
+        public void createNotification(string name, string number, string description)
+        {
+            //Assignar information till popup
+            alarmPopup.l_alarmName.Content = name;
+            alarmPopup.b_Number.Content = number;
+            alarmPopup.l_alarmDesc.Content = description;
+
+            
         }
 
         //Fyll "frames" med "AlarmInfo"
@@ -71,40 +116,54 @@ namespace AlarmClock
             //Tar bort alla kids
             sb_AlarmHolder.Children.Clear();
 
+            //Itererar genom alarm
             foreach (var item in alarmXMLRef)
             {
 
+                //Bygger datum
                 string dateBuilder = item.Year + "-" + item.Month + "-" + item.Day + " " + item.Hour + ":" + item.Minute;
 
+                //Sätter värden för alarm
                 AlarmInfo alarmInfoRef = new AlarmInfo();
                 alarmInfoRef.l_alarmName.Content = item.Name;
                 alarmInfoRef.l_alarmInfo.Content = dateBuilder;
                 alarmInfoRef.l_alarmDesc.Content = item.CaseNumber;
                 alarmInfoRef.l_alarmNumber.Content = item.PhoneNumber;
 
-
+                //Skapar frame, ändrar storlek
                 Frame frameRef = new Frame();
                 frameRef.Width = 196;
                 frameRef.Height = 40;
 
+                //Skapar en avskiljare, ändrar storlek
                 Frame divider = new Frame();
                 divider.Width = 225;
                 divider.Height = 5;
 
+                //Sätter in alarm i "Frame"
                 frameRef.Navigate(alarmInfoRef);
 
+                //Sätter in "Frame" i stackPanel
                 sb_AlarmHolder.Children.Add(frameRef);
                 sb_AlarmHolder.Children.Add(divider);
             }
 
         }
-        
 
+        //Rensar textFields
+        public void ClearProps() {
+            NameOfUser.Text = "";
+            PhoneNumber.Text = "";
+            CaseNumber.Text = "";
+        }
+
+        //Sätter rätt path till projektet
         public void SetXmlFilePath() {
             xmlPath = Environment.CurrentDirectory;
         }
         
 
+        //Kontrollerar datum
         public void controlDate() {
             if (PickDate.SelectedDate != null) {
                 alarmTime = new DateTime(PickDate.SelectedDate.Value.Year, PickDate.SelectedDate.Value.Month, PickDate.SelectedDate.Value.Day, hour, minute, 0, 0, DateTimeKind.Local);
@@ -112,6 +171,8 @@ namespace AlarmClock
 
         }
 
+
+        //Kontrollerar input från användaren
         public void controlInformation() {
             if (NameOfUser.Text != null || NameOfUser.Text != "")
             {
