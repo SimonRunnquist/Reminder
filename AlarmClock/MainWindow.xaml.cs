@@ -16,7 +16,7 @@ using System.Xml;
 using System.Xml.Linq;
 using System.IO;
 using System.Timers;
-
+using System.Media;
 
 namespace AlarmClock
 {
@@ -34,7 +34,6 @@ namespace AlarmClock
         //Referenser
         AlarmXML alarm = new AlarmXML();
         List<AlarmXML> alarmXMLRef = new List<AlarmXML>();
-        AlarmPopup alarmPopup = new AlarmPopup();
 
         //Globala variabler
         int hour = 0;
@@ -44,6 +43,7 @@ namespace AlarmClock
         string phoneNumber;
         string caseNumber;
         bool bSeeAlarms = false;
+        bool bAlarmActivated = false;
         
 
 
@@ -92,6 +92,8 @@ namespace AlarmClock
                 {
                     //Hittar alarm, gör något
                     Console.WriteLine("Ring alarm, GÖR DET NU!");
+                    createNotification(item.Id, item.Name, item.PhoneNumber, item.CaseNumber);
+                    
                 }
                 else {
                     //Hittar inte alarm, gör inget
@@ -100,14 +102,59 @@ namespace AlarmClock
             }
         }
 
-        public void createNotification(string name, string number, string description)
-        {
-            //Assignar information till popup
-            alarmPopup.l_alarmName.Content = name;
-            alarmPopup.b_Number.Content = number;
-            alarmPopup.l_alarmDesc.Content = description;
+        //Spelar upp ljud vid alarm
+        public void playSound() {
+            SystemSounds.Asterisk.Play();
+        }
 
+        //Skapar popup
+        public void createNotification(int id, string name, string number, string description)
+        {
             
+            try
+            {
+                //Kollar ifall alarmet redan är aktiverat
+                if (!bAlarmActivated)
+                {
+                    Application.Current.Dispatcher.Invoke((Action)delegate
+                   {
+                       playSound();
+                       bAlarmActivated = true;
+                       AlarmPopupWindow alarmPopup = new AlarmPopupWindow();
+
+                        //Assignar information till popup
+                        alarmPopup.l_alarmName.Content = name;
+                       alarmPopup.b_Number.Content = number;
+                       alarmPopup.l_alarmDesc.Content = description;
+
+                        //Ändrar position på popup
+                        alarmPopup.Top = 0;
+                       alarmPopup.Left = SystemParameters.PrimaryScreenWidth - alarmPopup.Width;
+
+                        //visar popup
+                        Nullable<bool> dialogResult = alarmPopup.ShowDialog();
+
+
+                       if (dialogResult == false)
+                       {
+                           bAlarmActivated = true;
+                       }
+
+                       else
+                       {
+                           bAlarmActivated = false;
+                           Console.WriteLine("Alarmet har stängs av");
+
+                        }
+                   });
+                }
+                else {
+                    Console.WriteLine("Alarmet redan aktiverat, men inte stängt");
+                }
+            }
+            catch (Exception e) {
+                Console.WriteLine(e.Message);
+            }
         }
 
         //Fyll "frames" med "AlarmInfo"
@@ -280,6 +327,7 @@ namespace AlarmClock
             }
         }
 
+        //Skapa XML dokument
         public void CreateXML() {
 
             if (File.Exists(xmlPath + @"\Alarms.xml"))
@@ -296,6 +344,7 @@ namespace AlarmClock
             }
         }
         
+        //Lägg till alarm
         public void addAlarm(int id, string name, string phoneNumber, string caseNumber, int year, int month, int day, int _hour, int _minute) {
             try
             {
@@ -326,6 +375,7 @@ namespace AlarmClock
 
         }
 
+        //Visar alarmlistan
         private void button_Click(object sender, RoutedEventArgs e)
         {
             if (!bSeeAlarms)
@@ -342,5 +392,6 @@ namespace AlarmClock
                 //b_ShowAlarms.Margin.Right = -32;
             }
         }
+
     }
 }
