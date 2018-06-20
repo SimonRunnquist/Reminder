@@ -12,7 +12,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using System.Windows;
+using System.Xml;
+using System.Xml.Linq;
 
 namespace AlarmClock
 {
@@ -23,10 +24,20 @@ namespace AlarmClock
     {
 
         bool moreInformation = false;
+        public int alarmID = 0;
+        string xmlPath = "";
 
         public AlarmInfo()
         {
             InitializeComponent();
+            SetXmlFilePath();
+
+        }
+
+        //Sätter rätt path till projektet
+        public void SetXmlFilePath()
+        {
+            xmlPath = Environment.CurrentDirectory;
         }
 
         private void button_Click(object sender, RoutedEventArgs e)
@@ -53,6 +64,33 @@ namespace AlarmClock
             if (l_alarmNumber.Content != null) {
                 Clipboard.SetText(l_alarmNumber.Content.ToString());
             }
+        }
+
+
+
+        //Tar bort alarm
+        public void DeleteAlarm(int id)
+        {
+            try
+            {
+                XDocument xdoc = XDocument.Load(xmlPath + @"\Alarms.xml");
+                xdoc.Descendants("Alarm")
+                    .Where(x => (string)x.Attribute("id") == id.ToString())
+                    .Remove();
+
+                xdoc.Save(xmlPath + @"\Alarms.xml");
+                
+            }
+
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+        }
+
+        private void b_Delete_Click(object sender, RoutedEventArgs e)
+        {
+            DeleteAlarm(alarmID);
         }
     }
 }

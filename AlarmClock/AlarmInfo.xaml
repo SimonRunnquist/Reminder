@@ -16,7 +16,7 @@
             </Label.Background>
         </Label>
         <Rectangle HorizontalAlignment="Left" Height="1" Margin="5,36,0,0" Stroke="#4C000000" StrokeThickness="0" VerticalAlignment="Top" Width="181" Fill="#4CFFFFFF"/>
-        <Button x:Name="button" Content="" HorizontalAlignment="Left" Height="33" Margin="5,3,0,0" VerticalAlignment="Top" Width="5" BorderBrush="{x:Null}" BorderThickness="0" Click="button_Click">
+        <Button x:Name="button" Content="" HorizontalAlignment="Left" Height="18" Margin="5,3,0,0" VerticalAlignment="Top" Width="5" BorderBrush="{x:Null}" BorderThickness="0" Click="button_Click">
             <Button.Background>
                 <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                     <GradientStop Color="#FF3EECA5" Offset="0"/>
@@ -31,5 +31,19 @@
             </Label.Background>
         </Label>
         <Button x:Name="copyNumber_button" Content="Copy" HorizontalAlignment="Left" Height="20" Margin="156,0,0,0" VerticalAlignment="Top" Width="30" Padding="0" BorderThickness="0" Background="#00DDDDDD" Foreground="#FF3EECA5" ToolTip="Copies the phone number" Click="copyNumber_button_Click"/>
+        <Button x:Name="b_Delete" Content="" HorizontalAlignment="Left" Height="15" Margin="5,21,0,0" VerticalAlignment="Top" Width="5" Padding="0" BorderThickness="0" Click="b_Delete_Click"  >
+            <Button.Background>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="#FFEC2929" Offset="0"/>
+                    <GradientStop Color="#FFFF8028" Offset="1"/>
+                </LinearGradientBrush>
+            </Button.Background>
+            <Button.BorderBrush>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="#FFEC2929" Offset="0"/>
+                    <GradientStop Color="#FFFF8028" Offset="1"/>
+                </LinearGradientBrush>
+            </Button.BorderBrush>
+        </Button>
     </Grid>
 </Page>

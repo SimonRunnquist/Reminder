@@ -27,7 +27,6 @@ namespace AlarmClock
     {
         //Datum och tider
         DateTime alarmTime = new DateTime();
-        DateTime currentTime = new DateTime();
         TimeSpan tiSp = new TimeSpan();
 
 
@@ -74,12 +73,41 @@ namespace AlarmClock
             {
                 controlDate();
                 controlInformation();
-                addAlarm(1, name, phoneNumber, caseNumber, alarmTime.Year, alarmTime.Month, alarmTime.Day, alarmTime.Hour, alarmTime.Minute);
+                addAlarm(CheckID(), name, phoneNumber, caseNumber, alarmTime.Year, alarmTime.Month, alarmTime.Day, alarmTime.Hour, alarmTime.Minute);
                 ClearProps();
                 ReadXml();
                 SortAlarms();
             }
         }
+
+        //Ger ett unikt ID och skickar tillbaka ID
+        public int CheckID() {
+            
+            List<int> iDChecker = new List<int>();
+            int freeID = 0;
+            ReadXml();
+
+            foreach (var item in alarmXMLRef) {
+                iDChecker.Add(item.Id);
+            }
+
+            for (var i = 0; i < 8; i++) {
+
+                if (iDChecker.Contains(freeID)) {
+                    freeID++;
+                    Console.WriteLine(freeID);
+                }
+
+                else {
+                    Console.WriteLine("ID-numret finns redan" + freeID);
+                    break;
+                }
+
+            }
+            
+            return freeID;
+        }
+
 
         //Kollar efter alarm i alarmXMLRef
         public void OnTimedEvent(object source, ElapsedEventArgs e)
@@ -172,6 +200,7 @@ namespace AlarmClock
 
                 //Sätter värden för alarm
                 AlarmInfo alarmInfoRef = new AlarmInfo();
+                alarmInfoRef.alarmID = item.Id;
                 alarmInfoRef.l_alarmName.Content = item.Name;
                 alarmInfoRef.l_alarmInfo.Content = dateBuilder;
                 alarmInfoRef.l_alarmDesc.Content = item.CaseNumber;
@@ -277,17 +306,35 @@ namespace AlarmClock
 
 
         }
+
         //Sätter tiden
         public void setTime() {
             tiSp = new TimeSpan(hour, minute, 0);
             alarmTime.Add(tiSp);
         }
 
-        
+        //Tar bort alarm
+        public void DeleteAlarm(int id) {
+            
+            try
+            {
+                XDocument doc = XDocument.Load(xmlPath + @"\Alarms.xml");
+                doc.Root.Descendants("Alarm")
+                       .Where(el => (string)el.Attribute("id") == id.ToString())
+                       .Remove();
 
-       //======================================================================//
-        //Läs XML-filen
+                ReadXml();
+                SortAlarms();
+            }
 
+            catch (Exception e) {
+                Console.WriteLine(e.Message);
+            }
+        }
+
+        //=====================================================================//
+        //Läs XML-filen                                                        //
+        //=====================================================================//
         public void ReadXml() {
             try {
                 alarmXMLRef.Clear();
@@ -295,7 +342,7 @@ namespace AlarmClock
                 var alarms = from alarm in doc.Descendants("Alarm")
                              select new
                              {
-                                 ID = alarm.Element("id").Value,
+                                 ID = alarm.Attribute("id").Value,
                                  Name = alarm.Element("name").Value,
                                  PhoneNumber = alarm.Element("phoneNumber").Value,
                                  CaseNumber = alarm.Element("caseNumber").Value,
@@ -351,7 +398,8 @@ namespace AlarmClock
                 XDocument doc = XDocument.Load(xmlPath + @"\Alarms.xml");
                 XElement alarm = doc.Element("Alarms");
                 alarm.Add(new XElement("Alarm",
-                            new XElement("id", id),
+                    //Testat lägga till Attribute
+                            new XAttribute("id", id),
                             new XElement("name", name),
                             new XElement("phoneNumber", phoneNumber),
                             new XElement("caseNumber", caseNumber),
