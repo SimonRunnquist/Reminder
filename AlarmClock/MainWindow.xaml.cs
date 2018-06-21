@@ -70,9 +70,27 @@ namespace AlarmClock
             if (checkTime())
             {
                 controlDate();
-                controlInformation();
-                addAlarm(CheckID(), name, phoneNumber, caseNumber, alarmTime.Year, alarmTime.Month, alarmTime.Day, alarmTime.Hour, alarmTime.Minute);
-                ClearProps();
+
+                if (ControlInformation())
+                {
+                    if (CheckID() < 9)
+                    {
+
+                        addAlarm(CheckID(), name, phoneNumber, caseNumber, alarmTime.Year, alarmTime.Month, alarmTime.Day, alarmTime.Hour, alarmTime.Minute);
+                        ClearProps();
+
+                    }
+
+                    else {
+                        Console.WriteLine("För många alarm, max antal är 8");
+                    }
+
+                }
+
+                else {
+
+                }
+                
                 ReadXml();
                 SortAlarms();
             }
@@ -89,20 +107,19 @@ namespace AlarmClock
                 iDChecker.Add(item.Id);
             }
 
-            for (var i = 0; i < 8; i++) {
-
-                if (iDChecker.Contains(freeID)) {
+            for (var i = 0; i < 9; i++)
+            {
+                if (iDChecker.Contains(freeID))
+                {
                     freeID++;
                     Console.WriteLine(freeID);
                 }
 
-                else {
-                    Console.WriteLine("ID-numret finns redan" + freeID);
+                else
+                {
                     break;
                 }
-
             }
-            
             return freeID;
         }
 
@@ -110,23 +127,17 @@ namespace AlarmClock
         //Kollar efter alarm i alarmXMLRef
         public void OnTimedEvent(object source, ElapsedEventArgs e)
         {
-            //Itererar igenom samtiga satta alarm
-            foreach (var item in alarmXMLRef) {
-
-                
-                if (DateTime.Now.Month == item.Month && DateTime.Now.Day == item.Day && DateTime.Now.Hour == item.Hour && DateTime.Now.Minute == item.Minute)
+                foreach (var item in alarmXMLRef)
                 {
-                    //Hittar alarm, gör något
-                    Console.WriteLine("Ring alarm, GÖR DET NU!");
-                    createNotification(item.Id, item.Name, item.PhoneNumber, item.CaseNumber);
-                    
+
+
+                    if (DateTime.Now.Month == item.Month && DateTime.Now.Day == item.Day && DateTime.Now.Hour == item.Hour && DateTime.Now.Minute == item.Minute)
+                    {
+                        createNotification(item.Id, item.Name, item.PhoneNumber, item.CaseNumber);
+
+                    }
                 }
-                else {
-                    //Hittar inte alarm, gör inget
-                    Console.WriteLine("Det är inte dags för alarm att ringa");
-                }
-            }
-        }
+         }
 
         //Spelar upp ljud vid alarm
         public void playSound() {
@@ -152,6 +163,7 @@ namespace AlarmClock
                         alarmPopup.l_alarmName.Content = name;
                         alarmPopup.b_Number.Content = number;
                         alarmPopup.l_alarmDesc.Content = description;
+                        alarmPopup.DeleteAlarm(id);
 
                         //Ändrar position på popup
                         alarmPopup.Top = 0;
@@ -168,10 +180,8 @@ namespace AlarmClock
 
                        else
                        {
-                           bAlarmActivated = false;
-                           Console.WriteLine("Alarmet har stängs av");
-
-                        }
+                            bAlarmActivated = false;
+                       }
                    });
                 }
                 else {
@@ -183,12 +193,32 @@ namespace AlarmClock
             }
         }
 
+        //Tar bort alarm
+        public void DeleteAlarm(int id)
+        {
+            try
+            {
+                XDocument doc = XDocument.Load(xmlPath + @"\Alarms.xml");
+                doc.Root.Descendants("Alarm")
+                       .Where(el => (string)el.Attribute("id") == id.ToString())
+                       .Remove();
+                
+                SortAlarms();
+            }
+
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+        }
+
         //Fyll "frames" med "AlarmInfo"
         public void SortAlarms() {
 
             //Tar bort alla kids
             sb_AlarmHolder.Children.Clear();
             ReadXml();
+
             //Itererar genom alarm
             foreach (var item in alarmXMLRef)
             {
@@ -247,7 +277,7 @@ namespace AlarmClock
 
 
         //Kontrollerar input från användaren
-        public void controlInformation() {
+        public bool ControlInformation() {
             if (NameOfUser.Text != null || NameOfUser.Text != "")
             {
                 if (PhoneNumber.Text != null || PhoneNumber.Text != "")
@@ -257,10 +287,15 @@ namespace AlarmClock
                         name = NameOfUser.Text;
                         phoneNumber = PhoneNumber.Text;
                         caseNumber = CaseNumber.Text;
+                        return true;
+                    } else {
+                        return false;
                     }
-
+                } else {
+                    return false;
                 }
-
+            } else {
+                return false;
             }
         }
 
@@ -298,7 +333,6 @@ namespace AlarmClock
                 return true;
             }
             else {
-                Console.WriteLine("Kolla tiden, något är fel");
                 return false;
             }
 
@@ -311,24 +345,7 @@ namespace AlarmClock
             alarmTime.Add(tiSp);
         }
 
-        //Tar bort alarm
-        public void DeleteAlarm(int id) {
-            
-            try
-            {
-                XDocument doc = XDocument.Load(xmlPath + @"\Alarms.xml");
-                doc.Root.Descendants("Alarm")
-                       .Where(el => (string)el.Attribute("id") == id.ToString())
-                       .Remove();
-
-                ReadXml();
-                SortAlarms();
-            }
-
-            catch (Exception e) {
-                Console.WriteLine(e.Message);
-            }
-        }
+        
 
         //=====================================================================//
         //Läs XML-filen                                                        //
@@ -436,7 +453,6 @@ namespace AlarmClock
                 MainWindowProp.Width = 228;
                 bSeeAlarms = false;
                 b_ShowAlarms.Margin = new Thickness(191, 431, -32, -22);
-                //b_ShowAlarms.Margin.Right = -32;
             }
         }
     }

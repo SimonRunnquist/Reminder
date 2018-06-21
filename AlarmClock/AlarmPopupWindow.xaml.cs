@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.Xml.Linq;
 
 namespace AlarmClock
 {
@@ -19,6 +20,8 @@ namespace AlarmClock
     /// </summary>
     public partial class AlarmPopupWindow : Window
     {
+        string xmlPath = "";
+
         public AlarmPopupWindow()
         {
             InitializeComponent();
@@ -31,6 +34,32 @@ namespace AlarmClock
                 Clipboard.SetText(b_Number.Content.ToString());
                 this.DialogResult = true;
                 Close();
+            }
+        }
+
+        //Sätter rätt path till projektet
+        public void SetXmlFilePath()
+        {
+            xmlPath = Environment.CurrentDirectory;
+        }
+
+        //Tar bort alarm
+        public void DeleteAlarm(int id)
+        {
+            try
+            {
+                XDocument xdoc = XDocument.Load(xmlPath + @"\Alarms.xml");
+                xdoc.Descendants("Alarm")
+                    .Where(x => (string)x.Attribute("id") == id.ToString())
+                    .Remove();
+
+                xdoc.Save(xmlPath + @"\Alarms.xml");
+                ((MainWindow)System.Windows.Application.Current.MainWindow).SortAlarms();
+            }
+
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
             }
         }
     }

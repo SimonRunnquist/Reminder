@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:AlarmClock"
         mc:Ignorable="d"
-        Title="EvryReminder" Height="482" Width="228" Background="#FF3F3F46" Visibility="Visible" ResizeMode="CanMinimize">
+        Title="Reminder" Height="482" Width="228" Background="#FF3F3F46" Visibility="Visible" ResizeMode="CanMinimize">
     <Grid Background="#FF3F3F46">
         <TextBox x:Name="NameOfUser" HorizontalAlignment="Left" Height="23" Margin="15,38,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="179" Background="#4C000000" Foreground="White" BorderBrush="{x:Null}"/>
         <TextBox x:Name="PhoneNumber" HorizontalAlignment="Left" Height="23" Margin="15,90,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="179" Background="#4C000000" Foreground="White" BorderBrush="{x:Null}"/>
