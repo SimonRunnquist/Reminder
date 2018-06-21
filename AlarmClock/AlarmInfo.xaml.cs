@@ -26,13 +26,17 @@ namespace AlarmClock
         bool moreInformation = false;
         public int alarmID = 0;
         string xmlPath = "";
+        
+        
+
 
         public AlarmInfo()
         {
             InitializeComponent();
             SetXmlFilePath();
-
         }
+
+        
 
         //Sätter rätt path till projektet
         public void SetXmlFilePath()
@@ -40,6 +44,7 @@ namespace AlarmClock
             xmlPath = Environment.CurrentDirectory;
         }
 
+        
         private void button_Click(object sender, RoutedEventArgs e)
         {
             if (!moreInformation)
@@ -79,7 +84,7 @@ namespace AlarmClock
                     .Remove();
 
                 xdoc.Save(xmlPath + @"\Alarms.xml");
-                
+                ((MainWindow)System.Windows.Application.Current.MainWindow).SortAlarms();
             }
 
             catch (Exception e)
@@ -91,6 +96,7 @@ namespace AlarmClock
         private void b_Delete_Click(object sender, RoutedEventArgs e)
         {
             DeleteAlarm(alarmID);
+
         }
     }
 }

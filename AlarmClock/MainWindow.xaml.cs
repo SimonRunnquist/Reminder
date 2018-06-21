@@ -43,8 +43,8 @@ namespace AlarmClock
         string caseNumber;
         bool bSeeAlarms = false;
         bool bAlarmActivated = false;
-        
 
+        
 
         public MainWindow()
         {
@@ -61,8 +61,6 @@ namespace AlarmClock
             aTimer.Elapsed += new ElapsedEventHandler(OnTimedEvent);
             aTimer.Interval = 5000;
             aTimer.Enabled = true;
-           
-
         }
 
         //Trycker på "Sätt Alarm"
@@ -152,12 +150,12 @@ namespace AlarmClock
 
                         //Assignar information till popup
                         alarmPopup.l_alarmName.Content = name;
-                       alarmPopup.b_Number.Content = number;
-                       alarmPopup.l_alarmDesc.Content = description;
+                        alarmPopup.b_Number.Content = number;
+                        alarmPopup.l_alarmDesc.Content = description;
 
                         //Ändrar position på popup
                         alarmPopup.Top = 0;
-                       alarmPopup.Left = SystemParameters.PrimaryScreenWidth - alarmPopup.Width;
+                        alarmPopup.Left = SystemParameters.PrimaryScreenWidth - alarmPopup.Width;
 
                         //visar popup
                         Nullable<bool> dialogResult = alarmPopup.ShowDialog();
@@ -190,7 +188,7 @@ namespace AlarmClock
 
             //Tar bort alla kids
             sb_AlarmHolder.Children.Clear();
-
+            ReadXml();
             //Itererar genom alarm
             foreach (var item in alarmXMLRef)
             {
@@ -205,7 +203,7 @@ namespace AlarmClock
                 alarmInfoRef.l_alarmInfo.Content = dateBuilder;
                 alarmInfoRef.l_alarmDesc.Content = item.CaseNumber;
                 alarmInfoRef.l_alarmNumber.Content = item.PhoneNumber;
-
+                
                 //Skapar frame, ändrar storlek
                 Frame frameRef = new Frame();
                 frameRef.Width = 196;
@@ -365,6 +363,7 @@ namespace AlarmClock
                     alarmRef.Day = Int32.Parse(alarm.Day);
                     alarmRef.Hour = Int32.Parse(alarm.Hour);
                     alarmRef.Minute = Int32.Parse(alarm.Minute);
+                    
 
                     alarmXMLRef.Add(alarmRef);
                 }
@@ -434,12 +433,11 @@ namespace AlarmClock
             }
             else {
 
-                MainWindowProp.Width = 230;
+                MainWindowProp.Width = 228;
                 bSeeAlarms = false;
-                b_ShowAlarms.Margin = new Thickness(192, 431, -32, -22);
+                b_ShowAlarms.Margin = new Thickness(191, 431, -32, -22);
                 //b_ShowAlarms.Margin.Right = -32;
             }
         }
-
     }
 }
