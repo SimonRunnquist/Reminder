@@ -73,7 +73,7 @@ namespace AlarmClock
 
                 if (ControlInformation())
                 {
-                    if (CheckID() < 9)
+                    if (CheckID() < 8)
                     {
 
                         addAlarm(CheckID(), name, phoneNumber, caseNumber, alarmTime.Year, alarmTime.Month, alarmTime.Day, alarmTime.Hour, alarmTime.Minute);
@@ -107,7 +107,7 @@ namespace AlarmClock
                 iDChecker.Add(item.Id);
             }
 
-            for (var i = 0; i < 9; i++)
+            for (var i = 0; i < 8; i++)
             {
                 if (iDChecker.Contains(freeID))
                 {
@@ -225,6 +225,12 @@ namespace AlarmClock
         //Fyll "frames" med "AlarmInfo"
         public void SortAlarms() {
 
+            string year = "";
+            string month = "";
+            string day = "";
+            string hour = "";
+            string minute = "";
+
             //Tar bort alla kids
             sb_AlarmHolder.Children.Clear();
             ReadXml();
@@ -233,8 +239,47 @@ namespace AlarmClock
             foreach (var item in alarmXMLRef)
             {
 
+                if (item.Day < 10)
+                {
+                    day = "0" + item.Day;
+                }
+
+                else {
+                    day = item.Day.ToString();
+                }
+
+                if (item.Month < 10)
+                {
+                    month = "0" + item.Month;
+                }
+
+                else
+                {
+                    month = item.Month.ToString();
+                }
+
+                if (item.Hour < 10)
+                {
+                    hour = "0" + item.Hour;
+                }
+
+                else
+                {
+                    hour = item.Hour.ToString();
+                }
+
+                if (item.Minute < 10)
+                {
+                    minute = "0" + item.Minute;
+                }
+
+                else
+                {
+                    minute = item.Minute.ToString();
+                }
+
                 //Bygger datum
-                string dateBuilder = item.Year + "-" + item.Month + "-" + item.Day + " " + item.Hour + ":" + item.Minute;
+                string dateBuilder = item.Year + "-" + month + "-" + day + " " + hour + ":" + minute;
 
                 //Sätter värden för alarm
                 AlarmInfo alarmInfoRef = new AlarmInfo();
