@@ -127,16 +127,26 @@ namespace AlarmClock
         //Kollar efter alarm i alarmXMLRef
         public void OnTimedEvent(object source, ElapsedEventArgs e)
         {
+            /*
+             * Blir en änring i listan
+             * problem med att iterera igenom
+             * Lös det
+             * Get it fixed 
+            */
+            int alarmCount = 0;
+
+            if (!bAlarmActivated && alarmCount == 0)
+            {
                 foreach (var item in alarmXMLRef)
                 {
-
-
                     if (DateTime.Now.Month == item.Month && DateTime.Now.Day == item.Day && DateTime.Now.Hour == item.Hour && DateTime.Now.Minute == item.Minute)
                     {
                         createNotification(item.Id, item.Name, item.PhoneNumber, item.CaseNumber);
-
+                        alarmCount = 1;
+                        break;
                     }
                 }
+            }
          }
 
         //Spelar upp ljud vid alarm
@@ -147,7 +157,6 @@ namespace AlarmClock
         //Skapar popup
         public void createNotification(int id, string name, string number, string description)
         {
-            
             try
             {
                 //Kollar ifall alarmet redan är aktiverat
@@ -163,6 +172,7 @@ namespace AlarmClock
                         alarmPopup.l_alarmName.Content = name;
                         alarmPopup.b_Number.Content = number;
                         alarmPopup.l_alarmDesc.Content = description;
+                        alarmPopup.SetXmlFilePath(xmlPath);
                         alarmPopup.DeleteAlarm(id);
 
                         //Ändrar position på popup
@@ -177,10 +187,10 @@ namespace AlarmClock
                        {
                            bAlarmActivated = true;
                        }
-
                        else
                        {
                             bAlarmActivated = false;
+                           SortAlarms();
                        }
                    });
                 }

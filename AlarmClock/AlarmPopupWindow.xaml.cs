@@ -38,9 +38,9 @@ namespace AlarmClock
         }
 
         //Sätter rätt path till projektet
-        public void SetXmlFilePath()
+        public void SetXmlFilePath(string path)
         {
-            xmlPath = Environment.CurrentDirectory;
+            xmlPath = path;
         }
 
         //Tar bort alarm
