@@ -1,0 +1,11 @@
+﻿<Window x:Class="AlarmClock.Notification"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:AlarmClock"
+        mc:Ignorable="d" Height="178" Width="300" ResizeMode="NoResize">
+    <Grid Background="#FF3F3F46">
+        <TextBlock x:Name="notify_text" HorizontalAlignment="Center" Margin="0" TextWrapping="WrapWithOverflow" Text="?" VerticalAlignment="Center" Height="129" Width="274" Foreground="White"/>
+    </Grid>
+</Window>

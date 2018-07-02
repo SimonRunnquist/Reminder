@@ -22,7 +22,7 @@
             </Calendar.Background>
         </Calendar>
         <Label Content="Date" HorizontalAlignment="Left" Margin="11,181,0,0" VerticalAlignment="Top" Foreground="White"/>
-        <Button x:Name="btn_setAlarm" Content="Set Alarm" HorizontalAlignment="Left" Margin="119,399,0,0" VerticalAlignment="Top" Width="75" Click="btn_setAlarm_Click" Height="22" BorderBrush="{x:Null}" BorderThickness="0" Foreground="Black"/>
+        <Button x:Name="btn_setAlarm" Content="Set Alarm" HorizontalAlignment="Left" Margin="119,399,0,0" VerticalAlignment="Top" Width="75" Click="btn_setAlarm_Click" Height="22" BorderBrush="{x:Null}" BorderThickness="0" Foreground="Black" Background="#FFDDDDDD"/>
         <ComboBox x:Name="cb_hour" HorizontalAlignment="Left" Margin="15,399,0,0" VerticalAlignment="Top" Width="42" BorderBrush="{x:Null}">
             <ComboBox.Background>
                 <LinearGradientBrush EndPoint="0,1" StartPoint="0,0">

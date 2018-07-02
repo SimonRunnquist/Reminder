@@ -43,6 +43,10 @@ namespace AlarmClock
         string caseNumber;
         bool bSeeAlarms = false;
         bool bAlarmActivated = false;
+        List<string> noticationMessages = new List<string>();
+
+        //Larm
+        MediaPlayer player = new MediaPlayer();
 
         
 
@@ -55,6 +59,7 @@ namespace AlarmClock
             CreateXML();
             ReadXml();
             SortAlarms();
+            setNotification();
 
             //Skapa timer
             Timer aTimer = new Timer();
@@ -80,14 +85,15 @@ namespace AlarmClock
                         ClearProps();
 
                     }
+                    else
+                    {
+                        Random rnd = new Random();
+                        int r = rnd.Next(noticationMessages.Count);
+                        Notification notification = new Notification();
 
-                    else {
-                        Console.WriteLine("För många alarm, max antal är 8");
+                        notification.notify_text.Text = (string)noticationMessages[r];
+                        notification.ShowDialog();
                     }
-
-                }
-
-                else {
 
                 }
                 
@@ -96,6 +102,22 @@ namespace AlarmClock
             }
         }
 
+
+        private void setNotification()
+        {
+            noticationMessages.Add("Hmm...You got alot of alarms. You might want to clear some before you add more.");
+            noticationMessages.Add("Okay, you need to take it easy with the alarms. Stay healthy.");
+            noticationMessages.Add("...No, no more. Please. No more alarms.");
+            noticationMessages.Add("Eight is enough, don't you think?");
+            noticationMessages.Add("Seriously? Do you really have more than eight people to call?");
+            noticationMessages.Add("Come on man, you have way to much to do already.");
+            noticationMessages.Add("You might want to rethink this, you have eight people to call already.");
+            noticationMessages.Add("Go grab an apple...or a banana...or delete an alarm.");
+            noticationMessages.Add("Hehe, oh you didn't.");
+            noticationMessages.Add("You can only have a total of eight alarms my friend.");
+            noticationMessages.Add("You got this message because you have waaay too many alarms.");
+
+        }
         //Ger ett unikt ID och skickar tillbaka ID
         public int CheckID() {
             
@@ -112,7 +134,6 @@ namespace AlarmClock
                 if (iDChecker.Contains(freeID))
                 {
                     freeID++;
-                    Console.WriteLine(freeID);
                 }
 
                 else
@@ -127,12 +148,6 @@ namespace AlarmClock
         //Kollar efter alarm i alarmXMLRef
         public void OnTimedEvent(object source, ElapsedEventArgs e)
         {
-            /*
-             * Blir en änring i listan
-             * problem med att iterera igenom
-             * Lös det
-             * Get it fixed 
-            */
             int alarmCount = 0;
 
             if (!bAlarmActivated && alarmCount == 0)
@@ -150,6 +165,7 @@ namespace AlarmClock
          }
 
         //Spelar upp ljud vid alarm
+        //OUTDATED OUTDATED OUTDATED
         public void playSound() {
             SystemSounds.Asterisk.Play();
         }
@@ -164,7 +180,7 @@ namespace AlarmClock
                 {
                     Application.Current.Dispatcher.Invoke((Action)delegate
                    {
-                       playSound();
+                       //playSound();
                        bAlarmActivated = true;
                        AlarmPopupWindow alarmPopup = new AlarmPopupWindow();
 
@@ -179,8 +195,13 @@ namespace AlarmClock
                         alarmPopup.Top = 0;
                         alarmPopup.Left = SystemParameters.PrimaryScreenWidth - alarmPopup.Width;
 
-                        //visar popup
-                        Nullable<bool> dialogResult = alarmPopup.ShowDialog();
+                       //Spelar upp ljud
+                       player.Open(new Uri(xmlPath + @"\Larm.mp3"));
+                       player.Volume = 0.8;
+                       player.Play();
+
+                       //visar popup
+                       Nullable<bool> dialogResult = alarmPopup.ShowDialog();
 
 
                        if (dialogResult == false)
@@ -224,8 +245,7 @@ namespace AlarmClock
 
         //Fyll "frames" med "AlarmInfo"
         public void SortAlarms() {
-
-            string year = "";
+            
             string month = "";
             string day = "";
             string hour = "";
@@ -304,6 +324,8 @@ namespace AlarmClock
 
                 //Sätter in "Frame" i stackPanel
                 sb_AlarmHolder.Children.Add(frameRef);
+
+                //Sätter in en "divider"
                 sb_AlarmHolder.Children.Add(divider);
             }
 
@@ -469,7 +491,6 @@ namespace AlarmClock
                 XDocument doc = XDocument.Load(xmlPath + @"\Alarms.xml");
                 XElement alarm = doc.Element("Alarms");
                 alarm.Add(new XElement("Alarm",
-                    //Testat lägga till Attribute
                             new XAttribute("id", id),
                             new XElement("name", name),
                             new XElement("phoneNumber", phoneNumber),

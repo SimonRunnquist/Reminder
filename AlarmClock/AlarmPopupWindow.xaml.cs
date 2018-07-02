@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Xml.Linq;
+using System.Timers;
 
 namespace AlarmClock
 {
@@ -26,6 +27,8 @@ namespace AlarmClock
         {
             InitializeComponent();
         }
+
+        
 
         private void b_Number_Click(object sender, RoutedEventArgs e)
         {
@@ -42,6 +45,8 @@ namespace AlarmClock
         {
             xmlPath = path;
         }
+
+        
 
         //Tar bort alarm
         public void DeleteAlarm(int id)
